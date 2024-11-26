@@ -34,11 +34,9 @@ int	sum_3to3_matrix(int array[3][3])
 	return (sum);
 }
 
-string	compare_2_3to3_matrices(int array1[3][3], int array2[3][3])
+bool	compare_2_3to3_matrices(int array1[3][3], int array2[3][3])
 {
-	if (sum_3to3_matrix(array1) == sum_3to3_matrix(array2))
-		return ("Yes! The two matrices are equal.");
-	return ("No! The two matrices are not equal.");
+	return (sum_3to3_matrix(array1) == sum_3to3_matrix(array2));
 }
 
 int	main(void)
@@ -60,6 +58,10 @@ int	main(void)
 	sum2 = sum_3to3_matrix (arr2);
 	cout << "\nThe sum of the matrix 2: " << sum2 << endl;
 	cout << endl;
-	cout << compare_2_3to3_matrices (arr1, arr2) << endl;
+
+	if (compare_2_3to3_matrices (arr1, arr2))
+		cout << "Yes! The two matrices are equal." << endl;
+	else
+		cout << "No! The two matrices are not equal." << endl;
 	return (0);
 }
