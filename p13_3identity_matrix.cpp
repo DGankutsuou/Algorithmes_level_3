@@ -23,7 +23,7 @@ void	print_3to3_matrix(int array[3][3])
 	}
 }
 
-int	sum_3to3_matrix(int array[3][3])
+bool	is_identity_matrix(int array[3][3])
 {
 	int	sum;
 
@@ -34,36 +34,13 @@ int	sum_3to3_matrix(int array[3][3])
 	return (sum);
 }
 
-bool	typical_3to3_matrices(int array1[3][3], int array2[3][3])
-{
-	for (short r = 0; r < 3; r++)
-		for (short c = 0; c < 3; c++)
-		{
-			if (array1[r][c] != array2[r][c])
-				return (0);
-		}
-	return (1);
-}
-
 int	main(void)
 {
 	srand ((unsigned)time (NULL));
 
-	int	arr1[3][3];
-	int	sum1;
-	int	arr2[3][3];
-	int	sum2;
+	int	arr[3][3];
 
-	fill_3to3_matrix_with_random_numbers (arr1, 0, 9);
-	print_3to3_matrix (arr1);
-	cout << endl;
-	fill_3to3_matrix_with_random_numbers (arr2, 0, 9);
-	print_3to3_matrix (arr2);
-	cout << endl;
-
-	if (typical_3to3_matrices (arr1, arr2))
-		cout << "Yes! The two matrices are typically equal." << endl;
-	else
-		cout << "No! The two matrices are not typically equal." << endl;
+	fill_3to3_matrix_with_random_numbers (arr, 0, 1);
+	print_3to3_matrix (arr);
 	return (0);
 }
