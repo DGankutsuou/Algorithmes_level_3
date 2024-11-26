@@ -25,13 +25,15 @@ void	print_3to3_matrix(int array[3][3])
 
 bool	is_identity_matrix(int array[3][3])
 {
-	int	sum;
-
-	sum = 0;
 	for(int i = 0; i < 3; i++)
 		for (int j = 0; j < 3; j++)
-			sum += array[i][j];
-	return (sum);
+		{
+			if (i == j && array[i][j] != 1)
+				return (0);
+			else if (i != j && array[i][j] != 0)
+				return (0);
+		}
+	return (1);
 }
 
 int	main(void)
@@ -39,8 +41,15 @@ int	main(void)
 	srand ((unsigned)time (NULL));
 
 	int	arr[3][3];
-
+	int	test[3][3] = {1, 0, 0,
+					0, 1, 0,
+					0, 0, 1};
 	fill_3to3_matrix_with_random_numbers (arr, 0, 1);
 	print_3to3_matrix (arr);
+	cout << endl;
+	if (is_identity_matrix (arr))
+		cout << "Yes! The matrix is identical" << endl;
+	else
+		cout << "No! The matrix is not identical" << endl;
 	return (0);
 }
