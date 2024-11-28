@@ -23,7 +23,7 @@ void	print_3to3_matrix(int matrix[3][3])
 	}
 }
 
-bool	is_scolar_matrix(int matrix[3][3])
+bool	is_scolar_3to3_matrix(int matrix[3][3])
 {
 	for(int i = 0; i < 3; i++)
 		for (int j = 0; j < 3; j++)
@@ -47,7 +47,7 @@ int	main(void)
 	fill_3to3_matrix_with_random_numbers (mtx, 0, 9);
 	print_3to3_matrix (mtx);
 	cout << endl;
-	if (is_scolar_matrix (mtx))
+	if (is_scolar_3to3_matrix (mtx))
 		cout << "Yes! The matrix is scolar" << endl;
 	else
 		cout << "No! The matrix is not scolar" << endl;
