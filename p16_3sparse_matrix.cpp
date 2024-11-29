@@ -24,16 +24,19 @@ void	print_3to3_matrix(int matrix[3][3])
 	}
 }
 
-short	count_number_in_3to3_matrix(int matrix[3][3], int number)
+bool	is_sparse_3to3_matrix(int matrix[3][3])
 {
 	short	counter;
 
 	counter = 0;
 	for(int i = 0; i < 3; i++)
 		for (int j = 0; j < 3; j++)
-			if (matrix[i][j] == number)
+			if (matrix[i][j] == 0)
 				counter++;
-	return (counter);
+	if (counter >= 5)
+		return (true);
+	else
+		return (false);
 }
 
 int	main(void)
@@ -42,7 +45,6 @@ int	main(void)
 
 	int	mtx[3][3];
 	int	count;
-	int	number;
 	int	test[3][3] = {9, 0, 0,
 					0, 9, 0,
 					0, 0, 9};
@@ -50,8 +52,10 @@ int	main(void)
 	fill_3to3_matrix_with_random_numbers (mtx, 0, 9);
 	print_3to3_matrix (mtx);
 	cout << endl;
-	number = input::read_number("Enter a number: ");
-	count = count_number_in_3to3_matrix (mtx, number);
-	cout << "The number is repeated " << count << " times" << endl;
+	if (is_sparse_3to3_matrix(mtx))
+		cout << "This matrix is sparse" << endl;
+	else
+		cout << "This matrix is not sparse" << endl;
+
 	return (0);
 }
