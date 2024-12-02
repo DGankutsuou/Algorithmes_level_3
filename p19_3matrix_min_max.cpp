@@ -24,7 +24,7 @@ void	print_3to3_matrix(int matrix[3][3])
 	}
 }
 
-bool	check_number_in_3to3_matrix(int number, int matrix[3][3])
+bool	print_3to3_matrix_min_max(int number, int matrix[3][3])
 {
 	short	counter;
 
@@ -48,10 +48,5 @@ int	main(void)
 	fill_3to3_matrix_with_random_numbers (mtx, 0, 9);
 	print_3to3_matrix (mtx);
 	cout << endl;
-	if (check_number_in_3to3_matrix(0, mtx))
-		cout << "The number is in the matrix" << endl;
-	else
-		cout << "The number is not in the matrix" << endl;
-
 	return (0);
 }
