@@ -24,16 +24,25 @@ void	print_3to3_matrix(int matrix[3][3])
 	}
 }
 
-bool	print_3to3_matrix_min_max(int number, int matrix[3][3])
+void	print_3to3_matrix_min_max(int matrix[3][3])
 {
-	short	counter;
+	short	min;
+	short	max;
 
-	counter = 0;
-	for(int i = 0; i < 3; i++)
-		for (int j = 0; j < 3; j++)
-			if (matrix[i][j] == number)
-				return (true);
-	return (false);
+	min = matrix[0][0];
+	max = min;
+	for(int r = 0; r < 3; r++)
+	{
+		for (int c = 0; c < 3; c++)
+		{
+			if (matrix[r][c] < min)
+				min = matrix[r][c];
+			else if (matrix[r][c] > max)
+				max = matrix[r][c];
+		}
+	}
+		cout << "The min number in this matrix: " << min << endl;
+		cout << "The max number in this matrix: " << max << endl;
 }
 
 int	main(void)
@@ -41,12 +50,13 @@ int	main(void)
 	srand ((unsigned)time (NULL));
 
 	int	mtx[3][3];
-	int	test[3][3] = {9, 0, 0,
-					0, 9, 0,
-					0, 0, 9};
+	// int	test[3][3] = {9, 0, 0,
+	// 				0, 9, 0,
+	// 				0, 0, 9};
 
 	fill_3to3_matrix_with_random_numbers (mtx, 0, 9);
 	print_3to3_matrix (mtx);
 	cout << endl;
+	print_3to3_matrix_min_max (mtx);
 	return (0);
 }
