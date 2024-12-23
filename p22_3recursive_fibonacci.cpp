@@ -30,30 +30,18 @@ void	print_fibonacci_numbers(int numbers)
 	cout << endl;
 }
 
-void	print_fibonacci_numbers_by_loop(int numbers)
+void	print_fibonacci_numbers_recursivly(int numbers)
 {
-	int	previous1;
-	int	previous2;
-	int	fibonacci;
-
 	if (numbers < 1)
 		return ;
-	cout << 1;
-	previous1 = 1;
-	previous2 = 0;
-	for (int f = 2; f <= numbers; f++)
-	{
-		fibonacci = previous1 + previous2;
-		cout << " - " << fibonacci;
-		previous2 = previous1;
-		previous1 = fibonacci;
-	}
-	cout << endl;
+	print_fibonacci_numbers_recursivly(numbers - 1);
+	cout << ft_fibonacci(numbers) << " - ";
 }
 
 int	main(void)
 {
 	print_fibonacci_numbers (10);
-	print_fibonacci_numbers_by_loop (10);
+	print_fibonacci_numbers_recursivly (10);
+	cout << endl;
 	return (0);
 }
