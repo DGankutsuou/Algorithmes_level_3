@@ -15,33 +15,28 @@ int	ft_fibonacci(int index)
 	return (nbr);
 }
 
-void	print_fibonacci_numbers(int numbers)
-{
-	int	index;
-
-	index = 1;
-	while (index <= numbers)
-	{
-		cout << ft_fibonacci (index);
-		if (index != numbers)
-			cout << " - ";
-		index++;
-	}
-	cout << endl;
-}
-
 void	print_fibonacci_numbers_recursivly(int numbers)
 {
+	static int	save = numbers;
 	if (numbers < 1)
 		return ;
-	print_fibonacci_numbers_recursivly(numbers - 1);
-	cout << ft_fibonacci(numbers) << " - ";
+	if (numbers > 1)
+		print_fibonacci_numbers_recursivly(numbers - 1);
+	cout << ft_fibonacci(numbers);
+	if (numbers != save)
+		cout << " - ";
+	if (numbers == save)
+		cout << endl;
+}
+
+int	print_fibonacci_numbers_recursivly2(int numbers)
+{
+	
 }
 
 int	main(void)
 {
-	print_fibonacci_numbers (10);
 	print_fibonacci_numbers_recursivly (10);
-	cout << endl;
+	print_fibonacci_numbers_recursivly2 (10);
 	return (0);
 }
