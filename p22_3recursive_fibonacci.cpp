@@ -30,7 +30,7 @@ void	print_fibonacci_numbers(int numbers)
 	cout << endl;
 }
 
-void	print_fibonacci_numbers_recursivly(int numbers, int previous1, int previous2)
+void	print_fibonacci_numbers_recursivly(int numbers, int previous1 = 0, int previous2 = 1)
 {
 	int	fibonacci;
 
@@ -49,7 +49,7 @@ void	print_fibonacci_numbers_recursivly(int numbers, int previous1, int previous
 int	main(void)
 {
 	print_fibonacci_numbers (10);
-	print_fibonacci_numbers_recursivly (10, 0, 1);
+	print_fibonacci_numbers_recursivly (10);
 	cout << endl;
 	return (0);
 }
