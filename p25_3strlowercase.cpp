@@ -1,7 +1,7 @@
 #include <iostream>
 using namespace std;
 
-void	*ft_strlowcase(char *str)
+string	ft_strlowcase(string str)
 {
 	int	idx;
 
@@ -13,4 +13,10 @@ void	*ft_strlowcase(char *str)
 		idx++;
 	}
 	return (str);
+}
+
+int	main(void)
+{
+	cout << ft_strlowcase("HELLO, THIS IS LOWERCASE FUNCTION") << endl;
+	return (0);
 }
