@@ -26,4 +26,13 @@ namespace ft
 			c -= 32;
 		return (c);
 	}
+
+	string	ft_strinvert(string str)
+	{
+		for (int i = 0; i < str.length(); i++)
+		{
+			str[i] = invert_char(str[i]);
+		}
+		return (str);
+	}
 }

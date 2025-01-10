@@ -98,4 +98,13 @@ namespace input
 			cin >> array[counter];
 		}
 	}
+
+	string	read_string()
+	{
+		string	str;
+
+		cout << "Enter your string:\n-> ";
+		getline(cin, str);
+		return (str);
+	}
 }
