@@ -41,7 +41,8 @@ namespace ft
 	{
 		string	vowels;
 
-		vowels = "aeiouAEIOU";
+		c = tolower(c);
+		vowels = "aeiou";
 		if(vowels.find(c) != string::npos)
 			return (true);
 		return (false);
