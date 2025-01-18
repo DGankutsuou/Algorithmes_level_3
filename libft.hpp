@@ -1,5 +1,6 @@
 #pragma once
 # include <iostream>
+# include <string>
 using namespace std;
 
 namespace ft
@@ -18,7 +19,7 @@ namespace ft
 		return (false);
 	}
 
-	char	invert_char(char c)
+	char	ft_invert_char(char c)
 	{
 		if (ft_isupper(c))
 			c += 32;
@@ -31,8 +32,18 @@ namespace ft
 	{
 		for (int i = 0; i < str.length(); i++)
 		{
-			str[i] = invert_char(str[i]);
+			str[i] = ft_invert_char(str[i]);
 		}
 		return (str);
+	}
+
+	bool	ft_isvowel(char c)
+	{
+		string	vowels;
+
+		vowels = "aeiouAEIOU";
+		if(vowels.find(c) != string::npos)
+			return (true);
+		return (false);
 	}
 }

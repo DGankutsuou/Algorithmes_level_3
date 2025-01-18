@@ -11,7 +11,7 @@ int	main(void)
 
 	cout << "Enter a char: ";
 	cin >> c;
-	cout << "inverted: " << ft::invert_char(c) << endl;
+	cout << "inverted: " << ft::ft_invert_char(c) << endl;
 	cout << "inverted @abou-hadhoud: " << invertchar(c) << endl;
 	return (0);
 }
