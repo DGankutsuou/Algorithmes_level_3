@@ -3,6 +3,23 @@
 #include <string>
 #include <vector>
 
+void	print_str_words(string str, string delim)
+{
+	string	word;
+	short	pos;
+
+	cout << "Words of this string:" << endl;
+	while ((pos = str.find(delim)) != string::npos)
+	{
+		word = str.substr(0, pos);
+		if (word != "")
+			cout << "-> " << word << endl;
+		str.erase(0, pos + delim.length());
+	}
+	if (str != "")
+		cout << "-> " << str << endl;
+}
+
 int	main(void)
 {
 	char	*ptr;
@@ -18,5 +35,7 @@ int	main(void)
 		printf ("-> %s\n", *words);
 		words++;
 	}
+	cout << "Abou-hadhoud:" << endl;
+	print_str_words(str, " ");
 	return (0);
 }
