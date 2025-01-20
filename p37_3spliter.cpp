@@ -29,7 +29,7 @@ int	main(void)
 	str = input::read_string();
 	words = spliter(str, " ");
 	cout << "Words are:\n";
-	for (string word : words)
+	for (string &word : words)
 	{
 		cout << "-> " << word << endl;
 	}
