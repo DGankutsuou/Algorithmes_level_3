@@ -28,8 +28,7 @@ string	joiner(vector <string> words, string delim)
 	joined = "";
 	for (string &word : words)
 		joined += word + delim;
-	joined.erase(joined.length() - delim.length(), delim.length());
-	return (joined);
+	return (joined.substr(0, joined.length() - delim.length()));
 }
 
 int	main(void)
