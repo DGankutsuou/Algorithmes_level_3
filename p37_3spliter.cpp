@@ -17,7 +17,7 @@ vector <string>	spliter(string str, string delim)
 		str.erase(0, pos + delim.length());
 	}
 	if (str != "")
-		words.push_back(word);
+		words.push_back(str);
 	return (words);
 }
 
