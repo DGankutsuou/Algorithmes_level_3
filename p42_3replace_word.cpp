@@ -38,6 +38,19 @@ string	str_replace(string str, string delim, string to_replace, string replace_t
 	return (joined.substr(0, joined.length() - delim.length()));
 }
 
+string	str_replace2(string str, string to_replace, string replace_to)
+{
+	short	pos;
+
+	pos = str.find(to_replace);
+	while (pos != string::npos)
+	{
+		str.replace(pos, to_replace.length(), replace_to);
+		pos = str.find(to_replace);
+	}
+	return (str);
+}
+
 int	main(void)
 {
 	string	str;
@@ -45,5 +58,7 @@ int	main(void)
 	str = input::read_string();
 	cout << "String replaced:\n";
 	cout << "-> " << str_replace(str, "; ", "USA", "MOROCCO") << endl;
+	cout << "String replaced 2:\n";
+	cout << "-> " << str_replace2(str, "USA", "America") << endl;
 	return (0);
 }
