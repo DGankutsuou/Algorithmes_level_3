@@ -21,7 +21,7 @@ vector <string>	spliter(string str, string delim)
 	return (words);
 }
 
-string	str_replace(string str, string delim, string word1, string word2)
+string	str_replace(string str, string delim, string to_replace, string replace_to)
 {
 	string	joined;
 	vector <string>	words;
@@ -30,8 +30,8 @@ string	str_replace(string str, string delim, string word1, string word2)
 	words = spliter(str, " ");
 	for (int i = 0; i < words.size(); i++)
 	{
-		if (word1 == words[i])
-			joined += word2 + delim;
+		if (to_replace == words[i])
+			joined += replace_to + delim;
 		else
 			joined += words[i] + delim;
 	}
