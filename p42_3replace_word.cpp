@@ -21,24 +21,20 @@ vector <string>	spliter(string str, string delim)
 	return (words);
 }
 
-string	str_reverse(string str, string delim)
+string	str_replace(string str, string delim, string word1, string word2)
 {
 	string	joined;
 	vector <string>	words;
-	vector <string>::iterator iter;
 
 	joined = "";
 	words = spliter(str, " ");
-	iter = words.end();
-	while (iter != words.begin())
+	for (int i = 0; i < words.size(); i++)
 	{
-		iter--;
-		joined += *iter + delim;
+		if (word1 == words[i])
+			joined += word2 + delim;
+		else
+			joined += words[i] + delim;
 	}
-	// for (int i = words.size() - 1; i >= 0; i--)
-	// {
-	// 	joined += words[i] + delim;
-	// }
 	return (joined.substr(0, joined.length() - delim.length()));
 }
 
@@ -47,7 +43,7 @@ int	main(void)
 	string	str;
 
 	str = input::read_string();
-	cout << "String reversed:\n";
-	cout << "-> " << str_reverse(str, "; ") << endl;
+	cout << "String replaced:\n";
+	cout << "-> " << str_replace(str, "; ", "USA", "MOROCCO") << endl;
 	return (0);
 }
