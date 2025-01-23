@@ -10,13 +10,16 @@ struct s_data
 	string	acount_balance;
 };
 
-void	read_data(s_data &data)
+s_data	read_data()
 {
+	s_data data;
+
 	data.acount_number = input::read_string("Enter acount number: ");
 	data.pin_code = input::read_string("Enter pin code: ");
 	data.name = input::read_string("Enter client name: ");
 	data.phone = input::read_string("Enter client phone number: ");
 	data.acount_balance = input::read_string("Enter acount balance: ");
+	return (data);
 }
 
 vector <string>	put_data_in_vector(s_data &data)
@@ -37,7 +40,7 @@ int	main(void)
 	vector <string>	v_data;
 
 	cout << "Enter client data:\n\n";
-	read_data(data);
+	data = read_data();
 	cout << "\ndata record to be saved\n\n";
 	v_data = put_data_in_vector(data);
 	cout << ft::joiner(v_data, "#//#") << endl;
