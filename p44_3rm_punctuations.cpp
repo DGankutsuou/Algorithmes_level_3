@@ -53,7 +53,14 @@ string	str_replace2(string str, string to_replace, string replace_to)
 
 string	rm_punctuations(string str)
 {
-	
+	for (int i = 0; i < str.length(); i++)
+	{
+		if (ispunct(str[i]))
+			str.erase(i, 1);
+		//str[i] = ',';
+	}
+	//str_replace2()
+	return (str);
 }
 
 int	main(void)
@@ -61,9 +68,7 @@ int	main(void)
 	string	str;
 
 	str = input::read_string();
-	cout << "String replaced:\n";
-	cout << "-> " << str_replace(str, "; ", "USA", "MOROCCO") << endl;
-	cout << "String replaced 2:\n";
-	cout << "-> " << str_replace2(str, "USA", "America") << endl;
+	cout << "Punctuations removed:\n";
+	cout << "-> " << rm_punctuations (str) << endl;
 	return (0);
 }
