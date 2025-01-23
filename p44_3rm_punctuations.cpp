@@ -57,9 +57,7 @@ string	rm_punctuations(string str)
 	{
 		if (ispunct(str[i]))
 			str.erase(i, 1);
-		//str[i] = ',';
 	}
-	//str_replace2()
 	return (str);
 }
 
