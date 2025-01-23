@@ -53,12 +53,15 @@ string	str_replace2(string str, string to_replace, string replace_to)
 
 string	rm_punctuations(string str)
 {
+	string	str_wp;
+
+	str_wp = "";
 	for (int i = 0; i < str.length(); i++)
 	{
-		if (ispunct(str[i]))
-			str.erase(i, 1);
+		if (!ispunct(str[i]))
+			str_wp += str[i];
 	}
-	return (str);
+	return (str_wp);
 }
 
 int	main(void)
