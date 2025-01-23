@@ -124,18 +124,38 @@ namespace ft
 		return (false);
 	}
 
-char	**ft_split(char const *s, char c)
-{
-	char	**splt;
-	size_t	words;
+	string	lowerizer(string str)
+	{
+		for (int i = 0; i < str.length(); i++)
+		{
+			if (str[i] >= 'A' && str[i] <= 'Z')
+				str[i] = tolower(str[i]);
+		}
+		return (str);
+	}
 
-	if (!s)
-		return (NULL);
-	words = ft_count_words(s, c);
-	splt = (char **)malloc(sizeof(char *) * (words + 1));
-	if (!splt)
-		return (NULL);
-	splt = filler(splt, s, c, words);
-	return (splt);
-}
+	string	capitalizer(string str)
+	{
+		for (int i = 0; i < str.length(); i++)
+		{
+			if (str[i] >= 'a' && str[i] <= 'z')
+				str[i] = toupper(str[i]);
+		}
+		return (str);
+	}
+
+	char	**ft_split(char const *s, char c)
+	{
+		char	**splt;
+		size_t	words;
+
+		if (!s)
+			return (NULL);
+		words = ft_count_words(s, c);
+		splt = (char **)malloc(sizeof(char *) * (words + 1));
+		if (!splt)
+			return (NULL);
+		splt = filler(splt, s, c, words);
+		return (splt);
+	}
 }
