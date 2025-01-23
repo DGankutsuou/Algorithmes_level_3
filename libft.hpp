@@ -1,6 +1,7 @@
 #pragma once
 # include <iostream>
 # include <string>
+# include <vector>
 using namespace std;
 
 static size_t	ft_count_words(char const *s, char c)
@@ -157,5 +158,33 @@ namespace ft
 			return (NULL);
 		splt = filler(splt, s, c, words);
 		return (splt);
+	}
+
+	string	joiner(vector <string> words, string delim)
+	{
+		string	joined;
+
+		joined = "";
+		for (string &word : words)
+			joined += word + delim;
+		return (joined.substr(0, joined.length() - delim.length()));
+	}
+
+	vector <string>	spliter(string str, string delim)
+	{
+		string	word;
+		short	pos;
+		vector <string> words;
+	
+		while ((pos = str.find(delim)) != string::npos)
+		{
+			word = str.substr(0, pos);
+			if (word != "")
+				words.push_back(word);
+			str.erase(0, pos + delim.length());
+		}
+		if (str != "")
+			words.push_back(str);
+		return (words);
 	}
 }

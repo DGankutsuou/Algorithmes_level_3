@@ -99,11 +99,11 @@ namespace input
 		}
 	}
 
-	string	read_string()
+	string	read_string(string message)
 	{
 		string	str;
 
-		cout << "Enter your string:\n-> ";
+		cout << message;
 		getline(cin, str);
 		return (str);
 	}
