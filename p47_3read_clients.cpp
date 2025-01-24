@@ -58,6 +58,14 @@ void	print_data(s_data &data)
 	cout << "Acount balance: " << data.acount_balance << endl;
 }
 
+vector <s_data>	read_clients()
+{
+	vector <s_data>	clients;
+
+	
+	return (clients);
+}
+
 int	main(void)
 {
 	s_data			data;
