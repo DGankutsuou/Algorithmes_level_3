@@ -1,5 +1,9 @@
 #include "inputslib.h"
 #include "libft.hpp"
+#include <stdlib.h>
+#include <fstream>
+
+#define FILE_NAME "data_of_clients.txt"
 
 struct s_data
 {
@@ -10,11 +14,12 @@ struct s_data
 	string	acount_balance;
 };
 
-s_data	read_data()
+s_data	read_new_client()
 {
 	s_data data;
 
-	data.acount_number = input::read_string("Enter acount number: ");
+	cout << "Enter accounnt number: ";
+	getline(cin >> ws, data.acount_number);
 	data.pin_code = input::read_string("Enter pin code: ");
 	data.name = input::read_string("Enter client name: ");
 	data.phone = input::read_string("Enter client phone number: ");
@@ -22,63 +27,63 @@ s_data	read_data()
 	return (data);
 }
 
-vector <string>	put_data_in_vector(s_data &data)
+string	record_data(s_data &data)
 {
-	vector <string>	v_data;
+	string	record;
+	string	delim;
 
-	v_data.push_back(data.acount_number);
-	v_data.push_back(data.pin_code);
-	v_data.push_back(data.name);
-	v_data.push_back(data.phone);
-	v_data.push_back(data.acount_balance);
-	return (v_data);
+	record = "";
+	delim = "#//#";
+	record += data.acount_number + delim;
+	record += data.pin_code + delim;
+	record += data.name + delim;
+	record += data.phone + delim;
+	record += data.acount_balance;
+	return (record);
 }
 
-s_data	split_record(string str)
+void	save_record_to_file(string file_name, string record)
+{
+	fstream	file;
+
+	file.open(FILE_NAME, ios::app);
+	if (file.is_open())
+	{
+		file << record << endl;
+		file.close();
+	}
+	else
+	{
+		cerr << "Failed to write in file :(" << endl;
+		exit(1);
+	}
+}
+
+void	add_new_client()
 {
 	s_data	data;
-	vector <string> splited;
 
-	splited = ft::spliter(str, "#//#");
-	data.acount_number = splited[0];
-	data.pin_code = splited[1];
-	data.name = splited[2];
-	data.phone = splited[3];
-	data.acount_balance = splited[4];
-	return (data);
+	data = read_new_client();
+	save_record_to_file(FILE_NAME, record_data(data));
 }
 
-void	print_data(s_data &data)
+void	add_clients()
 {
-	cout << "\nclient data:\n\n";
-	cout << "Acount number : " << data.acount_number << "\n";
-	cout << "Pin code      : " << data.pin_code << "\n";
-	cout << "Client name   : " << data.name << "\n";
-	cout << "Phone number  : " << data.phone << "\n";
-	cout << "Acount balance: " << data.acount_balance << endl;
-}
+	char	add_more;
 
-vector <s_data>	read_clients()
-{
-	vector <s_data>	clients;
-
-	
-	return (clients);
+	add_more = 'y';
+	do
+	{
+		system("cls");
+		cout << "\n*Adding new client*\n\n";
+		add_new_client();
+		cout << "\nClient added successfuly. Dost Thou desire to add more: ";
+		cin >> add_more;
+	} while (tolower(add_more) == 'y');
 }
 
 int	main(void)
 {
-	s_data			data;
-	string			data_record;
-	vector <string>	v_data;
-
-	cout << "Enter client data:\n\n";
-	data = read_data();
-	cout << "\ndata record to be saved\n\n";
-	v_data = put_data_in_vector(data);
-	data_record = ft::joiner(v_data, "#//#");
-	cout << data_record << endl;
-	data = split_record(data_record);
-	print_data(data);
+	add_clients();
 	return (0);
 }
