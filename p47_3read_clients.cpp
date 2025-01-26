@@ -1,6 +1,5 @@
 #include "inputslib.h"
 #include "libft.hpp"
-#include <stdlib.h>
 #include <fstream>
 
 #define FILE_NAME "data_of_clients.txt"
@@ -74,7 +73,7 @@ void	add_clients()
 	add_more = 'y';
 	do
 	{
-		system("cls");
+		system("clear");
 		cout << "\n*Adding new client*\n\n";
 		add_new_client();
 		cout << "\nClient added successfuly. Dost Thou desire to add more: ";
