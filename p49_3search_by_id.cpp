@@ -28,6 +28,16 @@ s_data	split_record(string str)
 	return (data);
 }
 
+void	print_data(s_data &data)
+{
+	cout << "\nClient data:\n\n";
+	cout << "Acount number : " << data.acount_number << "\n";
+	cout << "Pin code      : " << data.pin_code << "\n";
+	cout << "Client name   : " << data.name << "\n";
+	cout << "Phone number  : " << data.phone << "\n";
+	cout << "Acount balance: " << data.acount_balance << endl;
+}
+
 void	load_file_to_vector(string file_name, vector <string> &v_file)
 {
 	fstream	file;
@@ -44,11 +54,21 @@ void	load_file_to_vector(string file_name, vector <string> &v_file)
 
 void	search_by_id(vector <string> &v_file)
 {
-	
+	string	id = "";
+	s_data	data;
+
+	cout << "Enter the account number: ";
+	cin >> id;
 	for (string &line : v_file)
 	{
-		if ()
+		if (line.find(id) != string::npos)
+		{
+			data = split_record(line);
+			print_data(data);
+			return ;
+		}
 	}
+	cerr << "Error: Account number (" << id << ") not found" << endl;
 }
 
 int	main(void)
