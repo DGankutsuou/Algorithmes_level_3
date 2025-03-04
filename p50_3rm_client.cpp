@@ -80,6 +80,7 @@ void	search_by_id(vector <string> &v_file, string id)
 		}
 	}
 	cerr << "Error: Account number (" << id << ") not found" << endl;
+	exit (0);
 }
 
 string	record_data(s_data &data)
@@ -109,7 +110,9 @@ void	rm_client(string file_name, string id)
 		if (data.acount_number != id)
 			file << record_data(data) << endl;
 	}
-	cout << "Client purged successfuly" << endl;
+	file << "Hello" << endl;
+	file.close();
+	cout << "Data purged successfuly" << endl;
 }
 
 int	main(void)
