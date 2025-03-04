@@ -104,13 +104,12 @@ void	rm_client(string file_name, string id)
 	fstream			file;
 
 	load_file_to_data_vector(file_name, v_file);
-	file.open(file_name, ios::trunc);
+	file.open(file_name, ios::trunc | ios::out);
 	for (s_data &data : v_file)
 	{
 		if (data.acount_number != id)
 			file << record_data(data) << endl;
 	}
-	file << "Hello" << endl;
 	file.close();
 	cout << "Data purged successfuly" << endl;
 }
