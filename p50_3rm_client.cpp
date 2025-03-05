@@ -104,7 +104,7 @@ void	rm_client(string file_name, string id)
 	fstream			file;
 
 	load_file_to_data_vector(file_name, v_file);
-	file.open(file_name, ios::trunc | ios::out);
+	file.open(file_name, ios::out);
 	for (s_data &data : v_file)
 	{
 		if (data.acount_number != id)
@@ -121,12 +121,11 @@ int	main(void)
 	vector <string>	v_file;
 
 	load_file_to_vector(FILE_NAME, v_file);
-	cout << "Enter the account number: ";
-	cin >> id;
+	id = input::read_string("Enter account number: ");
 	search_by_id(v_file, id);
-	cout << "\nDo you wish to purge the file from this client (yes/no)?\n-> ";
+	cout << "\nDo you wish to purge the file from this client (Y/N)?\n-> ";
 	cin >> answer;
-	if (answer == "yes")
+	if (answer == "y" || answer == "Y")
 		rm_client(FILE_NAME, id);
 	else
 		exit (0);
