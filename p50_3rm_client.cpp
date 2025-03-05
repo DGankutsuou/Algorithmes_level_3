@@ -12,6 +12,7 @@ struct s_data
 	string	name;
 	string	phone;
 	string	acount_balance;
+	bool	to_be_deleted = false;
 };
 
 s_data	split_record(string str)
@@ -38,20 +39,29 @@ void	print_data(s_data &data)
 	cout << "Acount balance: " << data.acount_balance << endl;
 }
 
-void	load_file_to_vector(string file_name, vector <string> &v_file)
+void	load_file_to_vector(string file_name, vector <s_data> &v_file)
 {
 	fstream	file;
 	string	line;
+	s_data	data;
 
 	file.open(file_name, ios::in); // read mode
 	if (file.is_open())
 	{
 		while (getline(file, line))
-			v_file.push_back(line);
+		{
+			data = split_record(line);
+			v_file.push_back(data);
+		}
 		file.close();
 	}
+	else
+	{
+		cerr << "Error: unable to open file" << endl;
+		exit (0);
+	}
 }
-
+/*
 void	load_file_to_data_vector(string file_name, vector <s_data> &v_file)
 {
 	fstream	file;
@@ -65,22 +75,19 @@ void	load_file_to_data_vector(string file_name, vector <s_data> &v_file)
 		file.close();
 	}
 }
+*/
 
-void	search_by_id(vector <string> &v_file, string id)
+bool	search_by_id(vector <s_data> &v_file, string id, s_data &client)
 {
-	s_data	data;
-
-	for (string &line : v_file)
+	for (s_data &data : v_file)
 	{
-		if (line.find(id) != string::npos)
+		if (data.acount_number == id)
 		{
-			data = split_record(line);
-			print_data(data);
-			return ;
+			client = data;
+			return (true);
 		}
 	}
-	cerr << "Error: Account number (" << id << ") not found" << endl;
-	exit (0);
+	return (false);
 }
 
 string	record_data(s_data &data)
@@ -98,36 +105,82 @@ string	record_data(s_data &data)
 	return (record);
 }
 
-void	rm_client(string file_name, string id)
+bool	mark_client_to_be_deleted_by_id(string id, vector <s_data> &v_clients)
 {
-	vector <s_data>	v_file;
-	fstream			file;
-
-	load_file_to_data_vector(file_name, v_file);
-	file.open(file_name, ios::out);
-	for (s_data &data : v_file)
+	for (s_data &data : v_clients)
 	{
-		if (data.acount_number != id)
-			file << record_data(data) << endl;
+		if (data.acount_number == id)
+		{
+			data.to_be_deleted = true;
+			return (true);
+		}
 	}
-	file.close();
-	cout << "Data purged successfuly" << endl;
+	cerr << "Error: Account number (" << id << ") not found" << endl;
+	return (false);
+}
+
+void	save_clients_to_file(string file_name, vector <s_data> &v_clients)
+{
+	fstream	file;
+	string	record;
+
+	file.open(FILE_NAME, ios::out);
+	if (file.is_open())
+	{
+		for (s_data &data : v_clients)
+		{
+			if (!data.to_be_deleted)
+			{
+				record = record_data(data);
+				file << record << endl;
+			}
+		}
+		file.close();
+	}
+	else
+	{
+		cerr << "Failed to open file :(" << endl;
+		exit(1);
+	}
+}
+
+bool	delete_client_by_id(string id, vector <s_data> &v_clients)
+{
+	char	answer;
+	s_data	client;
+
+	answer = 'n';
+	if (search_by_id(v_clients, id, client))
+	{
+		print_data(client);
+		cout << "Do you wish to delete this client? (Y/N)\n-> ";
+		cin >> answer;
+		if (answer == 'Y' || answer == 'y')
+		{
+			mark_client_to_be_deleted_by_id(id, v_clients);
+			save_clients_to_file(FILE_NAME, v_clients);
+			load_file_to_vector(FILE_NAME, v_clients);
+			cout << "Client deleted successfuly" << endl;
+			return (true);
+		}
+
+	}
+	else
+	{
+		cerr << "Error: Account number (" << id << ") not found" << endl;
+		return (false);
+	}
+	return (false);
 }
 
 int	main(void)
 {
 	string			id;
 	string			answer;
-	vector <string>	v_file;
+	vector <s_data>	v_file;
 
 	load_file_to_vector(FILE_NAME, v_file);
 	id = input::read_string("Enter account number: ");
-	search_by_id(v_file, id);
-	cout << "\nDo you wish to purge the file from this client (Y/N)?\n-> ";
-	cin >> answer;
-	if (answer == "y" || answer == "Y")
-		rm_client(FILE_NAME, id);
-	else
-		exit (0);
+	delete_client_by_id(id, v_file);
 	return (0);
 }
