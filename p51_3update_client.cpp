@@ -62,10 +62,11 @@ void	load_file_to_vector(string file_name, vector <s_data> &v_file)
 	}
 }
 
-s_data	read_infos()
+s_data	change_client_infos(string id)
 {
 	s_data data;
 
+	data.acount_number = id;
 	cout << "Enter pin code: ";
 	getline(cin >> ws, data.pin_code);
 	data.name = input::read_string("Enter client name: ");
@@ -100,21 +101,6 @@ string	record_data(s_data &data)
 	record += data.phone + delim;
 	record += data.acount_balance;
 	return (record);
-}
-
-bool	change_client_infos(string id, vector <s_data> &v_clients)
-{
-	for (s_data &data : v_clients)
-	{
-		if (data.acount_number == id)
-		{
-			data = read_infos();
-			data.acount_number = id;
-			return (true);
-		}
-	}
-	cerr << "Error: Account number (" << id << ") not found" << endl;
-	return (false);
 }
 
 void	save_clients_to_file(string file_name, vector <s_data> &v_clients)
@@ -155,9 +141,15 @@ bool	update_client_by_id(string id, vector <s_data> &v_clients)
 		cin >> answer;
 		if (answer == 'Y' || answer == 'y')
 		{
-			change_client_infos(id, v_clients);
+			for (s_data &data : v_clients)
+			{
+				if (data.acount_number == id)
+				{
+					data = change_client_infos(id);
+					break ;
+				}
+			}
 			save_clients_to_file(FILE_NAME, v_clients);
-			load_file_to_vector(FILE_NAME, v_clients);
 			cout << "Client updated successfuly" << endl;
 			return (true);
 		}
