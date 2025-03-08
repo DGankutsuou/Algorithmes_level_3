@@ -26,7 +26,7 @@ int	main(void)
 	string	str;
 	vector <string>	words;
 
-	str = input::read_string();
+	str = input::read_string("Enter a string: ");
 	words = spliter(str, " ");
 	cout << "Words are:\n";
 	for (string &word : words)
