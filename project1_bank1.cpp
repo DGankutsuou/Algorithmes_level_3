@@ -14,6 +14,7 @@ struct s_data
 	string	name;
 	string	phone;
 	string	acount_balance;
+	bool	to_be_deleted = false;
 };
 
 s_data	split_record(string str)
@@ -63,9 +64,9 @@ void	load_file_to_data_vector(string file_name, vector <s_data> &v_data)
 	}
 }
 
-bool	search_by_id(vector <s_data> &v_file, string id, s_data &client)
+bool	search_by_id(vector <s_data> &v_data, string id, s_data &client)
 {
-	for (s_data &data : v_file)
+	for (s_data &data : v_data)
 	{
 		if (data.acount_number == id)
 		{
@@ -91,9 +92,9 @@ string	record_data(s_data &data)
 	return (record);
 }
 
-bool	mark_client_to_be_deleted_by_id(string id, vector <s_data> &v_clients)
+bool	mark_client_to_be_deleted_by_id(string id, vector <s_data> &v_data)
 {
-	for (s_data &data : v_clients)
+	for (s_data &data : v_data)
 	{
 		if (data.acount_number == id)
 		{
@@ -105,7 +106,7 @@ bool	mark_client_to_be_deleted_by_id(string id, vector <s_data> &v_clients)
 	return (false);
 }
 
-void	save_clients_to_file(string file_name, vector <s_data> &v_clients)
+void	save_clients_to_file(string file_name, vector <s_data> &v_data)
 {
 	fstream	file;
 	string	record;
@@ -113,7 +114,7 @@ void	save_clients_to_file(string file_name, vector <s_data> &v_clients)
 	file.open(FILE_NAME, ios::out);
 	if (file.is_open())
 	{
-		for (s_data &data : v_clients)
+		for (s_data &data : v_data)
 		{
 			if (!data.to_be_deleted)
 			{
@@ -130,22 +131,22 @@ void	save_clients_to_file(string file_name, vector <s_data> &v_clients)
 	}
 }
 
-bool	delete_client_by_id(string id, vector <s_data> &v_clients)
+bool	delete_client_by_id(string id, vector <s_data> &v_data)
 {
 	char	answer;
 	s_data	client;
 
 	answer = 'n';
-	if (search_by_id(v_clients, id, client))
+	if (search_by_id(v_data, id, client))
 	{
 		print_data(client);
 		cout << "Do you wish to delete this client? (Y/N)\n-> ";
 		cin >> answer;
 		if (answer == 'Y' || answer == 'y')
 		{
-			mark_client_to_be_deleted_by_id(id, v_clients);
-			save_clients_to_file(FILE_NAME, v_clients);
-			load_file_to_data_vector(FILE_NAME, v_clients);
+			mark_client_to_be_deleted_by_id(id, v_data);
+			save_clients_to_file(FILE_NAME, v_data);
+			load_file_to_data_vector(FILE_NAME, v_data);
 			cout << "Client deleted successfuly" << endl;
 			return (true);
 		}
@@ -163,36 +164,29 @@ bool	clients_deleter(vector <s_data> &v_data)
 {
 	string	id;
 
-	id = input::read_string("Enter client's account number: ");
-	return (delete_client_by_id(id, v_data))
+	system ("clear");
+	cout << "Enter client's account number: ";
+	getline(cin >> ws, id);
+	return (delete_client_by_id(id, v_data));
 }
 
-s_data	read_new_client()
+s_data	read_new_client(vector <s_data> &v_data)
 {
-	s_data data;
+	s_data	data;
 
 	cout << "Enter accounnt number: ";
 	getline(cin >> ws, data.acount_number);
+	while (search_by_id(v_data, data.acount_number, data))
+	{
+		cout << "This account number allready exist\n";
+		cout << "Enter another number: ";
+		getline(cin >> ws, data.acount_number);
+	}
 	data.pin_code = input::read_string("Enter pin code: ");
 	data.name = input::read_string("Enter client name: ");
 	data.phone = input::read_string("Enter client phone number: ");
 	data.acount_balance = input::read_string("Enter acount balance: ");
 	return (data);
-}
-
-string	record_data(s_data &data)
-{
-	string	record;
-	string	delim;
-
-	record = "";
-	delim = "#//#";
-	record += data.acount_number + delim;
-	record += data.pin_code + delim;
-	record += data.name + delim;
-	record += data.phone + delim;
-	record += data.acount_balance;
-	return (record);
 }
 
 void	save_record_to_file(string file_name, string record)
@@ -212,24 +206,25 @@ void	save_record_to_file(string file_name, string record)
 	}
 }
 
-void	add_new_client()
+void	add_new_client(vector <s_data> &v_data)
 {
 	s_data	data;
 
-	data = read_new_client();
+	data = read_new_client(v_data);
 	save_record_to_file(FILE_NAME, record_data(data));
+	v_data.push_back(data);
 }
 
-void	add_clients()
+void	add_clients(vector <s_data> &v_data)
 {
 	char	add_more;
 
 	add_more = 'y';
 	do
 	{
-		system("clear");
+		system ("clear");
 		cout << "\n*Adding new client*\n\n";
-		add_new_client();
+		add_new_client(v_data);
 		cout << "\nClient added successfuly. Dost Thou desire to add more (Y/N)?\n-> ";
 		cin >> add_more;
 	} while (tolower(add_more) == 'y');
@@ -281,7 +276,7 @@ void	line_printer(string &line)
 
 void	print_clients_table(vector <string> &v_file)
 {
-	system("clear");
+	system ("clear");
 	print_header(v_file.size());
 	for (string &line : v_file)
 	{
@@ -292,6 +287,58 @@ void	print_clients_table(vector <string> &v_file)
 		cout << "_____";
 	}
 	cout << endl;
+}
+
+s_data	change_client_infos(string id)
+{
+	s_data data;
+
+	data.acount_number = id;
+	cout << "Enter pin code: ";
+	getline(cin >> ws, data.pin_code);
+	data.name = input::read_string("Enter client name: ");
+	data.phone = input::read_string("Enter client phone number: ");
+	data.acount_balance = input::read_string("Enter acount balance: ");
+	return (data);
+}
+
+bool	update_client_by_id(string id, vector <s_data> &v_clients)
+{
+	char	answer;
+	s_data	client;
+
+	answer = 'n';
+	if (search_by_id(v_clients, id, client))
+	{
+		print_data(client);
+		cout << "Do you wish to update this client infos? (Y/N)\n-> ";
+		cin >> answer;
+		if (answer == 'Y' || answer == 'y')
+		{
+			for (s_data &data : v_clients)
+			{
+				if (data.acount_number == id)
+				{
+					data = change_client_infos(id);
+					break ;
+				}
+			}
+			save_clients_to_file(FILE_NAME, v_clients);
+			cout << "Client updated successfuly" << endl;
+			return (true);
+		}
+	}
+	else
+	{
+		cerr << "Error: Account number (" << id << ") not found" << endl;
+		return (false);
+	}
+	return (false);
+}
+
+bool	client_updater()
+{
+	return (update_client_by_id());
 }
 
 void	act(short choise)
@@ -307,11 +354,13 @@ void	act(short choise)
 			print_clients_table(v_file);
 			break ;
 		case 2:
-			add_clients();
+			add_clients(v_data);
 			break ;
 		case 3:
+			clients_deleter(v_data);
 			break ;
-		// case 4:
+		case 4:
+
 			break ;
 		// case 5:
 			break ;
