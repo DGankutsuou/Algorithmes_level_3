@@ -302,20 +302,20 @@ s_data	change_client_infos(string id)
 	return (data);
 }
 
-bool	update_client_by_id(string id, vector <s_data> &v_clients)
+bool	update_client_by_id(string id, vector <s_data> &v_data)
 {
 	char	answer;
 	s_data	client;
 
 	answer = 'n';
-	if (search_by_id(v_clients, id, client))
+	if (search_by_id(v_data, id, client))
 	{
 		print_data(client);
 		cout << "Do you wish to update this client infos? (Y/N)\n-> ";
 		cin >> answer;
 		if (answer == 'Y' || answer == 'y')
 		{
-			for (s_data &data : v_clients)
+			for (s_data &data : v_data)
 			{
 				if (data.acount_number == id)
 				{
@@ -323,7 +323,7 @@ bool	update_client_by_id(string id, vector <s_data> &v_clients)
 					break ;
 				}
 			}
-			save_clients_to_file(FILE_NAME, v_clients);
+			save_clients_to_file(FILE_NAME, v_data);
 			cout << "Client updated successfuly" << endl;
 			return (true);
 		}
@@ -336,9 +336,14 @@ bool	update_client_by_id(string id, vector <s_data> &v_clients)
 	return (false);
 }
 
-bool	client_updater()
+bool	client_updater(vector <s_data> &v_data)
 {
-	return (update_client_by_id());
+	string	id;
+
+	system ("clear");
+	cout << "Enter client's account number: ";
+	getline(cin >> ws, id);
+	return (update_client_by_id(id, v_data));
 }
 
 void	act(short choise)
@@ -360,7 +365,7 @@ void	act(short choise)
 			clients_deleter(v_data);
 			break ;
 		case 4:
-
+			client_updater(v_data);
 			break ;
 		// case 5:
 			break ;
