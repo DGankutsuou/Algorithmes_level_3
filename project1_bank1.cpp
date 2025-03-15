@@ -346,6 +346,20 @@ bool	client_updater(vector <s_data> &v_data)
 	return (update_client_by_id(id, v_data));
 }
 
+void	find_client(vector <s_data> &v_data)
+{
+	s_data	client;
+	string	id;
+
+	system ("clear");
+	cout << "Enter client's account number: ";
+	getline(cin >> ws, id);
+	if (search_by_id(v_data, id, client))
+		print_data(client);
+	else
+		cout << "Error: Client is not found" << endl;
+}
+
 void	act(short choise)
 {
 	vector <string>	v_file;
@@ -367,7 +381,8 @@ void	act(short choise)
 		case 4:
 			client_updater(v_data);
 			break ;
-		// case 5:
+		case 5:
+			find_client(v_data);
 			break ;
 		default:
 			exit (0);
