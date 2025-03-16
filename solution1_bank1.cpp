@@ -264,7 +264,6 @@ void	add_new_clients()
 	add_more = 'y';
 	do
 	{
-
 		cout << "\n*Adding new client*\n\n";
 		add_new_client();
 		cout << "\nClient added successfuly. Dost Thou desire to add more (Y/N)?\n-> ";
@@ -288,13 +287,13 @@ void	load_file_to_str_vector(string file_name, vector <string> &v_file)
 
 void	print_header(short number_of_clients)
 {
-	cout << "\n\t\t\t\t***Clients list (" << number_of_clients << ")***\n";
+	cout << "\n\t\t***Clients list (" << number_of_clients << ")***\n";
 	for (int i = 0; i < 5; i++)
 	{
 		cout << "____________________";
 	}
 	cout << '\n';
-	cout << "| Acount number\t| Pin code\t| Client name\t\t\t";
+	cout << "| Acount number\t| Pin code\t| Client name\t\t";
 	cout << "| Phone number\t| Acount balance\n";
 	for (int i = 0; i < 5; i++)
 	{
@@ -385,7 +384,7 @@ bool	update_client_by_id(string id, vector <s_data> &v_data)
 void	show_add_new_clients_screen(void)
 {
 	cout << "________________________________\n";
-	cout << "\t\tAdd new clients\n";
+	cout << "\tAdd new clients\n";
 	cout << "________________________________\n" << endl;
 	add_new_clients();
 }
@@ -396,7 +395,7 @@ void	show_delete_client_screen(void)
 	vector <s_data>	v_data;
 
 	cout << "________________________________\n";
-	cout << "\t\tDelete client\n";
+	cout << "\tDelete client\n";
 	cout << "________________________________\n" << endl;
 	v_data = load_file_to_data_vector(FILE_NAME);
 	account_number = read_account_number();
@@ -409,7 +408,7 @@ void	show_update_client_screen(void)
 	vector <s_data>	v_data;
 
 	cout << "________________________________\n";
-	cout << "\t\tUpdate client\n";
+	cout << "\tUpdate client\n";
 	cout << "________________________________\n" << endl;
 	v_data = load_file_to_data_vector(FILE_NAME);
 	account_number = read_account_number();
@@ -423,7 +422,7 @@ void	show_find_client_screen(void)
 	string			account_number;
 
 	cout << "________________________________\n";
-	cout << "\t\tFind client\n";
+	cout << "\tFind client\n";
 	cout << "________________________________\n" << endl;
 	v_data = load_file_to_data_vector(FILE_NAME);
 	account_number = read_account_number();
@@ -439,9 +438,8 @@ void	show_find_client_screen(void)
 void	show_exit_screen()
 {
 	cout << "________________________________\n";
-	cout << "\t\tProgram exited\n";
+	cout << "\tProgram exited\n";
 	cout << "________________________________\n" << endl;
-	system("clear");
 }
 
 void	back_to_main_menu(void)
