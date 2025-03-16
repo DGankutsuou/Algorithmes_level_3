@@ -29,6 +29,15 @@ struct s_data
 	bool	to_be_deleted = false;
 };
 
+string	read_account_number()
+{
+	string	account_number;
+
+	cout << "Enter client's account number: ";
+	getline(cin >> ws, account_number);
+	return (account_number);
+}
+
 s_data	split_record(string str)
 {
 	s_data	data;
@@ -145,14 +154,12 @@ void	save_clients_to_file(string file_name, vector <s_data> &v_data)
 	}
 }
 
-bool	delete_client_by_id(string id)
+bool	delete_client_by_id(string id, vector <s_data> &v_data)
 {
-	vector <s_data>	v_data;
 	char			answer;
 	s_data			client;
 
 	answer = 'n';
-	v_data = load_file_to_data_vector(FILE_NAME);
 	if (search_by_id(v_data, id, client))
 	{
 		print_data(client);
@@ -176,24 +183,46 @@ bool	delete_client_by_id(string id)
 	return (false);
 }
 
-bool	client_deleter()
+bool	is_client_exist_by_id(string account_number, string file_name)
 {
-	string	id;
+	fstream	file;
 
-	cout << "Enter client's account number: ";
-	getline(cin >> ws, id);
-	return (delete_client_by_id(id));
+	file.open(file_name, ios::in);
+	if (file.is_open() == true)
+	{
+		string	line;
+		s_data	data;
+		while (getline(file, line))
+		{
+			data = split_record(line);
+			if (data.acount_number == account_number)
+			{
+				file.close();
+				return (true);
+			}
+		}
+		file.close();
+		return (false);
+	}
+	else
+	{
+		cerr << "Error: Unable to open file: \"" << file_name << "\"" << endl;
+		exit (1);
+	}
 }
 
-s_data	read_new_client(vector <s_data> &v_data)
+s_data	read_new_client()
 {
-	s_data	data;
+	s_data			data;
+	vector <s_data>	v_data;
 
+	v_data = load_file_to_data_vector(FILE_NAME);
 	cout << "Enter accounnt number: ";
 	getline(cin >> ws, data.acount_number);
-	while (search_by_id(v_data, data.acount_number, data))
+	while (is_client_exist_by_id(data.acount_number, FILE_NAME))
 	{
-		cout << "This account number allready exist\n";
+		cout << "This account number (" << data.acount_number
+			<< ") allready exist\n";
 		cout << "Enter another number: ";
 		getline(cin >> ws, data.acount_number);
 	}
@@ -208,7 +237,7 @@ void	save_record_to_file(string file_name, string record)
 {
 	fstream	file;
 
-	file.open(FILE_NAME, ios::app);
+	file.open(file_name, ios::app);
 	if (file.is_open())
 	{
 		file << record << endl;
@@ -224,10 +253,7 @@ void	save_record_to_file(string file_name, string record)
 void	add_new_client()
 {
 	s_data			data;
-	vector <s_data>	v_data;
-
-	v_data = load_file_to_data_vector(FILE_NAME);
-	data = read_new_client(v_data);
+	data = read_new_client();
 	save_record_to_file(FILE_NAME, record_data(data));
 }
 
@@ -356,30 +382,6 @@ bool	update_client_by_id(string id, vector <s_data> &v_data)
 	return (false);
 }
 
-bool	client_updater(vector <s_data> &v_data)
-{
-	string	id;
-
-	cout << "Enter client's account number: ";
-	getline(cin >> ws, id);
-	return (update_client_by_id(id, v_data));
-}
-
-void	find_client()
-{
-	vector <s_data>	v_data;
-	s_data			client;
-	string			id;
-
-	v_data = load_file_to_data_vector(FILE_NAME);
-	cout << "Enter client's account number: ";
-	getline(cin >> ws, id);
-	if (search_by_id(v_data, id, client))
-		print_data(client);
-	else
-		cout << "Error: Client is not found" << endl;
-}
-
 void	show_add_new_clients_screen(void)
 {
 	cout << "________________________________\n";
@@ -390,21 +392,56 @@ void	show_add_new_clients_screen(void)
 
 void	show_delete_client_screen(void)
 {
+	string			account_number;
+	vector <s_data>	v_data;
+
 	cout << "________________________________\n";
 	cout << "\t\tDelete client\n";
 	cout << "________________________________\n" << endl;
-	client_deleter();
+	v_data = load_file_to_data_vector(FILE_NAME);
+	account_number = read_account_number();
+	delete_client_by_id(account_number, v_data);
+}
+
+void	show_update_client_screen(void)
+{
+	string			account_number;
+	vector <s_data>	v_data;
+
+	cout << "________________________________\n";
+	cout << "\t\tUpdate client\n";
+	cout << "________________________________\n" << endl;
+	v_data = load_file_to_data_vector(FILE_NAME);
+	account_number = read_account_number();
+	update_client_by_id(account_number, v_data);
+}
+
+void	show_find_client_screen(void)
+{
+	vector <s_data>	v_data;
+	s_data			client;
+	string			account_number;
+
+	cout << "________________________________\n";
+	cout << "\t\tFind client\n";
+	cout << "________________________________\n" << endl;
+	v_data = load_file_to_data_vector(FILE_NAME);
+	account_number = read_account_number();
+	if (search_by_id(v_data, account_number, client))
+		print_data(client);
+	else
+	{
+		cout << "Client with account number (" <<
+		account_number << ") is not found" << endl;
+	}
 }
 
 void	show_exit_screen()
 {
-	char	e;
-
-	cout << "Thank you for using our bank system\n";
-	cout << "Press any key to exit...";
-	cin >> e;
+	cout << "________________________________\n";
+	cout << "\t\tProgram exited\n";
+	cout << "________________________________\n" << endl;
 	system("clear");
-	exit(0);
 }
 
 void	back_to_main_menu(void)
@@ -437,12 +474,12 @@ void	perform_option(e_main_menu_option option)
 			break ;
 		case e_main_menu_option::e_update_client_infos:
 			system ("clear");
-			client_updater();
+			show_update_client_screen();
 			back_to_main_menu();
 			break ;
 		case e_main_menu_option::e_find_client:
 			system ("clear");
-			find_client();
+			show_find_client_screen();
 			back_to_main_menu();
 			break ;
 		case e_main_menu_option::e_exit:
