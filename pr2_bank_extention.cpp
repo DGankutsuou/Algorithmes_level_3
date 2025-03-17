@@ -35,11 +35,11 @@ struct s_data
 	string	pin_code;
 	string	name;
 	string	phone;
-	string	account_balance;
+	double	account_balance;
 	bool	to_be_deleted = false;
 };
 
-string	read_account_number()
+string	read_account_number(void)
 {
 	string	account_number;
 
@@ -58,7 +58,7 @@ s_data	split_record(string str)
 	data.pin_code = splited[1];
 	data.name = splited[2];
 	data.phone = splited[3];
-	data.account_balance = splited[4];
+	data.account_balance = stod(splited[4]);
 	return (data);
 }
 
@@ -69,7 +69,7 @@ void	print_data(s_data &data)
 	cout << "Pin code      : " << data.pin_code << "\n";
 	cout << "Client name   : " << data.name << "\n";
 	cout << "Phone number  : " << data.phone << "\n";
-	cout << "Acount balance: " << data.account_balance << endl;
+	cout << "Acount balance: " << data.account_balance << '$' << endl;
 }
 
 vector <s_data>	load_file_to_data_vector(string file_name)
@@ -121,7 +121,7 @@ string	record_data(s_data &data)
 	record += data.pin_code + delim;
 	record += data.name + delim;
 	record += data.phone + delim;
-	record += data.account_balance;
+	record += to_string(data.account_balance) + "$";
 	return (record);
 }
 
@@ -221,7 +221,7 @@ bool	is_client_exist_by_id(string account_number, string file_name)
 	}
 }
 
-s_data	read_new_client()
+s_data	read_new_client(void)
 {
 	s_data			data;
 	vector <s_data>	v_data;
@@ -239,7 +239,7 @@ s_data	read_new_client()
 	data.pin_code = input::read_string("Enter pin code: ");
 	data.name = input::read_string("Enter client name: ");
 	data.phone = input::read_string("Enter client phone number: ");
-	data.account_balance = input::read_string("Enter acount balance: ");
+	data.account_balance = (double)input::read_positive_number("Enter account balance: ");
 	return (data);
 }
 
@@ -260,14 +260,14 @@ void	save_record_to_file(string file_name, string record)
 	}
 }
 
-void	add_new_client()
+void	add_new_client(void)
 {
 	s_data			data;
 	data = read_new_client();
 	save_record_to_file(FILE_NAME, record_data(data));
 }
 
-void	add_new_clients()
+void	add_new_clients(void)
 {
 	char	add_more;
 
@@ -318,11 +318,11 @@ void	line_printer(s_data &data)
 	cout << "| " << left << setw(14) << data.pin_code;
 	cout << "| " << left << setw(30) << data.name;
 	cout << "| " << left << setw(14) << data.phone;
-	cout << "| " << left << setw(14) << data.account_balance;
+	cout << "| " << left << setw(14) << to_string(data.account_balance) + "$";
 	cout << endl;
 }
 
-void	print_clients_table()
+void	print_clients_table(void)
 {
 	vector <s_data>	v_data;
 
@@ -353,7 +353,7 @@ s_data	change_client_infos(string id)
 	getline(cin >> ws, data.pin_code);
 	data.name = input::read_string("Enter client name: ");
 	data.phone = input::read_string("Enter client phone number: ");
-	data.account_balance = input::read_string("Enter acount balance: ");
+	data.account_balance = (double)input::read_positive_number("Enter account balance: ");
 	return (data);
 }
 
@@ -445,7 +445,7 @@ void	show_find_client_screen(void)
 	}
 }
 
-void	show_exit_screen()
+void	show_exit_screen(void)
 {
 	cout << "________________________________\n";
 	cout << "\tProgram exited\n";
@@ -474,28 +474,31 @@ bool	deposit_to_client_account(string account_number,vector <s_data> &v_data)
 {
 
 	char	answer;
-	int		deposit;
+	double	deposit;
 	s_data	client;
 
 	answer = 'n';
 	if (search_by_id(v_data, account_number, client))
 	{
 		print_data(client);
-		cout << "Do you wish to deposit in this account? (Y/N)\n-> ";
-		cin >> answer;
-		if (answer == 'Y' || answer == 'y')
+		cout << "How much do you wish to deposit?\n-> ";
+		cin >> deposit;
+		for (s_data &data : v_data)
 		{
-			for (s_data &data : v_data)
+			if (data.acount_number == account_number)
 			{
-				if (data.acount_number == account_number)
+				cout << "Do you wish to perform this transaction? (Y/N)\n-> ";
+				cin >> answer;
+				if (answer == 'Y' || answer == 'y')
 				{
-					data = change_client_infos(account_number);
-					break ;
+					data.account_balance += deposit;
+					cout << "Deposit successed, balance now is "
+						<< data.account_balance << '$' << endl;
+					save_clients_to_file(FILE_NAME, v_data);
+					return (true);
 				}
+				return (false);
 			}
-			save_clients_to_file(FILE_NAME, v_data);
-			cout << "deposit successed" << endl;
-			return (true);
 		}
 	}
 	else
@@ -506,9 +509,52 @@ bool	deposit_to_client_account(string account_number,vector <s_data> &v_data)
 	return (false);
 }
 
-void	show_deposit_screen()
+bool	withdraw_from_client_account(string account_number,vector <s_data> &v_data)
 {
+	char	answer;
+	double	withdraw;
+	s_data	client;
 
+	answer = 'n';
+	if (search_by_id(v_data, account_number, client))
+	{
+		print_data(client);
+		cout << "How much do you wish to withdraw?\n-> ";
+		cin >> withdraw;
+		for (s_data &data : v_data)
+		{
+			if (data.acount_number == account_number)
+			{
+				while (data.account_balance < withdraw)
+				{
+					cout << "You can withdraw up to " << data.account_balance << "$\n";
+					cout << "How much do you wish to withdraw?\n-> ";
+					cin >> withdraw;
+				}
+				cout << "Do you wish to perform this transaction? (Y/N)\n-> ";
+				cin >> answer;
+				if (answer == 'Y' || answer == 'y')
+				{
+					data.account_balance -= withdraw;
+					cout << "Withdraw successed, balance now is "
+						<< data.account_balance << '$' << endl;
+					save_clients_to_file(FILE_NAME, v_data);
+					return (true);
+				}
+				return (false);
+			}
+		}
+	}
+	else
+	{
+		cerr << "Error: Account number (" << account_number << ") not found" << endl;
+		return (false);
+	}
+	return (false);
+}
+
+void	show_deposit_screen(void)
+{
 	string			account_number;
 	vector <s_data>	v_data;
 
@@ -520,6 +566,19 @@ void	show_deposit_screen()
 	deposit_to_client_account(account_number, v_data);
 }
 
+void	show_withdraw_screen(void)
+{
+	string			account_number;
+	vector <s_data>	v_data;
+
+	cout << "________________________________\n";
+	cout << "\tWithdraw screen\n";
+	cout << "________________________________\n" << endl;
+	v_data = load_file_to_data_vector(FILE_NAME);
+	account_number = read_account_number();
+	withdraw_from_client_account(account_number, v_data);
+}
+
 void	perform_transactions_option(e_transactions_options option)
 {
 	switch (option)
@@ -529,11 +588,11 @@ void	perform_transactions_option(e_transactions_options option)
 			show_deposit_screen();
 			back_to_transactions_menu();
 			break ;
-		// case e_transactions_options::e_withdraw:
-		// 	system ("clear");
-		// 	show_withdraw_screen();
-		// 	back_to_transactions_menu();
-		// 	break ;
+		case e_transactions_options::e_withdraw:
+			system ("clear");
+			show_withdraw_screen();
+			back_to_transactions_menu();
+			break ;
 		// case e_transactions_options::e_total_balances:
 		// 	system ("clear");
 		// 	show_total_balances_screen();
@@ -548,7 +607,7 @@ void	perform_transactions_option(e_transactions_options option)
 	}
 }
 
-short	read_transactions_option()
+short	read_transactions_option(void)
 {
 	short	option;
 
@@ -612,7 +671,7 @@ void	perform_main_menu_option(e_main_menu_options option)
 	}
 }
 
-short	read_main_menu_option()
+short	read_main_menu_option(void)
 {
 	short	option;
 

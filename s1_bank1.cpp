@@ -111,7 +111,7 @@ string	record_data(s_data &data)
 	record += data.pin_code + delim;
 	record += data.name + delim;
 	record += data.phone + delim;
-	record += data.acount_balance;
+	record += to_string(data.acount_balance) + "$";
 	return (record);
 }
 
