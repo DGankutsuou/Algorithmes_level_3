@@ -35,7 +35,7 @@ struct s_data
 	string	pin_code;
 	string	name;
 	string	phone;
-	string	acount_balance;
+	string	account_balance;
 	bool	to_be_deleted = false;
 };
 
@@ -58,7 +58,7 @@ s_data	split_record(string str)
 	data.pin_code = splited[1];
 	data.name = splited[2];
 	data.phone = splited[3];
-	data.acount_balance = splited[4];
+	data.account_balance = splited[4];
 	return (data);
 }
 
@@ -69,7 +69,7 @@ void	print_data(s_data &data)
 	cout << "Pin code      : " << data.pin_code << "\n";
 	cout << "Client name   : " << data.name << "\n";
 	cout << "Phone number  : " << data.phone << "\n";
-	cout << "Acount balance: " << data.acount_balance << endl;
+	cout << "Acount balance: " << data.account_balance << endl;
 }
 
 vector <s_data>	load_file_to_data_vector(string file_name)
@@ -121,7 +121,7 @@ string	record_data(s_data &data)
 	record += data.pin_code + delim;
 	record += data.name + delim;
 	record += data.phone + delim;
-	record += data.acount_balance;
+	record += data.account_balance;
 	return (record);
 }
 
@@ -239,7 +239,7 @@ s_data	read_new_client()
 	data.pin_code = input::read_string("Enter pin code: ");
 	data.name = input::read_string("Enter client name: ");
 	data.phone = input::read_string("Enter client phone number: ");
-	data.acount_balance = input::read_string("Enter acount balance: ");
+	data.account_balance = input::read_string("Enter acount balance: ");
 	return (data);
 }
 
@@ -318,7 +318,7 @@ void	line_printer(s_data &data)
 	cout << "| " << left << setw(14) << data.pin_code;
 	cout << "| " << left << setw(30) << data.name;
 	cout << "| " << left << setw(14) << data.phone;
-	cout << "| " << left << setw(14) << data.acount_balance;
+	cout << "| " << left << setw(14) << data.account_balance;
 	cout << endl;
 }
 
@@ -353,7 +353,7 @@ s_data	change_client_infos(string id)
 	getline(cin >> ws, data.pin_code);
 	data.name = input::read_string("Enter client name: ");
 	data.phone = input::read_string("Enter client phone number: ");
-	data.acount_balance = input::read_string("Enter acount balance: ");
+	data.account_balance = input::read_string("Enter acount balance: ");
 	return (data);
 }
 
@@ -474,7 +474,7 @@ bool	deposit_to_client_account(string account_number,vector <s_data> &v_data)
 {
 
 	char	answer;
-	int		
+	int		deposit;
 	s_data	client;
 
 	answer = 'n';
