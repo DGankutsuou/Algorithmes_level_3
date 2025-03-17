@@ -7,9 +7,10 @@
 
 #define FILE_NAME "data_of_clients.txt"
 
+void	show_transactions_screen(void);
 void	show_main_menu_screen(void);
 
-enum e_main_menu_option
+enum e_main_menu_options
 {
 	e_show_clients_list = 1,
 	e_add_new_client = 2,
@@ -18,6 +19,14 @@ enum e_main_menu_option
 	e_find_client = 5,
 	e_transactions = 6,
 	e_exit = 7
+};
+
+enum e_transactions_options
+{
+	e_deposit = 1,
+	e_withdraw = 2,
+	e_total_balances = 3,
+	e_main_menu = 4
 };
 
 struct s_data
@@ -443,6 +452,15 @@ void	show_exit_screen()
 	cout << "________________________________\n" << endl;
 }
 
+void	back_to_transactions_menu(void)
+{
+	char	back;
+
+	cout << "press any key to go back to transactions menu...";
+	cin >> back;
+	show_transactions_screen();
+}
+
 void	back_to_main_menu(void)
 {
 	char	back;
@@ -450,6 +468,92 @@ void	back_to_main_menu(void)
 	cout << "press any key to go back to main menu...";
 	cin >> back;
 	show_main_menu_screen();
+}
+
+bool	deposit_to_client_account(string account_number,vector <s_data> &v_data)
+{
+
+	char	answer;
+	int		
+	s_data	client;
+
+	answer = 'n';
+	if (search_by_id(v_data, account_number, client))
+	{
+		print_data(client);
+		cout << "Do you wish to deposit in this account? (Y/N)\n-> ";
+		cin >> answer;
+		if (answer == 'Y' || answer == 'y')
+		{
+			for (s_data &data : v_data)
+			{
+				if (data.acount_number == account_number)
+				{
+					data = change_client_infos(account_number);
+					break ;
+				}
+			}
+			save_clients_to_file(FILE_NAME, v_data);
+			cout << "deposit successed" << endl;
+			return (true);
+		}
+	}
+	else
+	{
+		cerr << "Error: Account number (" << account_number << ") not found" << endl;
+		return (false);
+	}
+	return (false);
+}
+
+void	show_deposit_screen()
+{
+
+	string			account_number;
+	vector <s_data>	v_data;
+
+	cout << "________________________________\n";
+	cout << "\tDeposit screen\n";
+	cout << "________________________________\n" << endl;
+	v_data = load_file_to_data_vector(FILE_NAME);
+	account_number = read_account_number();
+	deposit_to_client_account(account_number, v_data);
+}
+
+void	perform_transactions_option(e_transactions_options option)
+{
+	switch (option)
+	{
+		case e_transactions_options::e_deposit:
+			system ("clear");
+			show_deposit_screen();
+			back_to_transactions_menu();
+			break ;
+		// case e_transactions_options::e_withdraw:
+		// 	system ("clear");
+		// 	show_withdraw_screen();
+		// 	back_to_transactions_menu();
+		// 	break ;
+		// case e_transactions_options::e_total_balances:
+		// 	system ("clear");
+		// 	show_total_balances_screen();
+		// 	back_to_transactions_menu();
+		// 	break ;
+		case e_transactions_options::e_main_menu:
+			system ("clear");
+			show_main_menu_screen();
+			break ;
+		default:
+			exit (0);
+	}
+}
+
+short	read_transactions_option()
+{
+	short	option;
+
+	option = input::read_number_in_range(1, 4);
+	return (option);
 }
 
 void	show_transactions_screen(void)
@@ -463,44 +567,43 @@ void	show_transactions_screen(void)
 	cout << "\t[3]: Total balances\n";
 	cout << "\t[4]: Main menu\n";
 	cout << "=====================================\n" << endl;
-	perform_option(e_main_menu_option(read_option()));
+	perform_transactions_option(e_transactions_options(read_transactions_option()));
 }
 
-void	perform_option(e_main_menu_option option)
+void	perform_main_menu_option(e_main_menu_options option)
 {
 	switch (option)
 	{
-		case e_main_menu_option::e_show_clients_list:
+		case e_main_menu_options::e_show_clients_list:
 			system ("clear");
 			print_clients_table();
 			back_to_main_menu();
 			break ;
-		case e_main_menu_option::e_add_new_client:
+		case e_main_menu_options::e_add_new_client:
 			system ("clear");
 			show_add_new_clients_screen();
 			back_to_main_menu();
 			break ;
-		case e_main_menu_option::e_delete_client:
+		case e_main_menu_options::e_delete_client:
 			system ("clear");
 			show_delete_client_screen();
 			back_to_main_menu();
 			break ;
-		case e_main_menu_option::e_update_client_infos:
+		case e_main_menu_options::e_update_client_infos:
 			system ("clear");
 			show_update_client_screen();
 			back_to_main_menu();
 			break ;
-		case e_main_menu_option::e_find_client:
+		case e_main_menu_options::e_find_client:
 			system ("clear");
 			show_find_client_screen();
 			back_to_main_menu();
 			break ;
-		case e_main_menu_option::e_transactions:
+		case e_main_menu_options::e_transactions:
 			system ("clear");
-			show_find_client_screen();
-			back_to_main_menu();
+			show_transactions_screen();
 			break ;
-		case e_main_menu_option::e_exit:
+		case e_main_menu_options::e_exit:
 			system ("clear");
 			show_exit_screen();
 			break ;
@@ -509,7 +612,7 @@ void	perform_option(e_main_menu_option option)
 	}
 }
 
-short	read_option()
+short	read_main_menu_option()
 {
 	short	option;
 
@@ -531,7 +634,7 @@ void	show_main_menu_screen(void)
 	cout << "\t[6]: Transactions\n";
 	cout << "\t[7]: Exit\n";
 	cout << "=====================================\n" << endl;
-	perform_option(e_main_menu_option(read_option()));
+	perform_main_menu_option(e_main_menu_options(read_main_menu_option()));
 }
 
 int	main(void)
