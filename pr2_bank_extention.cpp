@@ -478,33 +478,30 @@ bool	deposit_to_client_account(string account_number,vector <s_data> &v_data)
 	s_data	client;
 
 	answer = 'n';
-	if (search_by_id(v_data, account_number, client))
-	{
-		print_data(client);
-		cout << "How much do you wish to deposit?\n-> ";
-		cin >> deposit;
-		for (s_data &data : v_data)
-		{
-			if (data.acount_number == account_number)
-			{
-				cout << "Do you wish to perform this transaction? (Y/N)\n-> ";
-				cin >> answer;
-				if (answer == 'Y' || answer == 'y')
-				{
-					data.account_balance += deposit;
-					cout << "Deposit successed, balance now is "
-						<< data.account_balance << '$' << endl;
-					save_clients_to_file(FILE_NAME, v_data);
-					return (true);
-				}
-				return (false);
-			}
-		}
-	}
-	else
+	while (!search_by_id(v_data, account_number, client))
 	{
 		cerr << "Error: Account number (" << account_number << ") not found" << endl;
-		return (false);
+		account_number = read_account_number();
+	}
+	print_data(client);
+	cout << "How much do you wish to deposit?\n-> ";
+	cin >> deposit;
+	for (s_data &data : v_data)
+	{
+		if (data.acount_number == account_number)
+		{
+			cout << "Do you wish to perform this transaction? (Y/N)\n-> ";
+			cin >> answer;
+			if (answer == 'Y' || answer == 'y')
+			{
+				data.account_balance += deposit;
+				cout << "Deposit successed, balance now is "
+					<< data.account_balance << '$' << endl;
+				save_clients_to_file(FILE_NAME, v_data);
+				return (true);
+			}
+			return (false);
+		}
 	}
 	return (false);
 }
@@ -516,39 +513,36 @@ bool	withdraw_from_client_account(string account_number,vector <s_data> &v_data)
 	s_data	client;
 
 	answer = 'n';
-	if (search_by_id(v_data, account_number, client))
-	{
-		print_data(client);
-		cout << "How much do you wish to withdraw?\n-> ";
-		cin >> withdraw;
-		for (s_data &data : v_data)
-		{
-			if (data.acount_number == account_number)
-			{
-				while (data.account_balance < withdraw)
-				{
-					cout << "You can withdraw up to " << data.account_balance << "$\n";
-					cout << "How much do you wish to withdraw?\n-> ";
-					cin >> withdraw;
-				}
-				cout << "Do you wish to perform this transaction? (Y/N)\n-> ";
-				cin >> answer;
-				if (answer == 'Y' || answer == 'y')
-				{
-					data.account_balance -= withdraw;
-					cout << "Withdraw successed, balance now is "
-						<< data.account_balance << '$' << endl;
-					save_clients_to_file(FILE_NAME, v_data);
-					return (true);
-				}
-				return (false);
-			}
-		}
-	}
-	else
+	while (!search_by_id(v_data, account_number, client))
 	{
 		cerr << "Error: Account number (" << account_number << ") not found" << endl;
-		return (false);
+		account_number = read_account_number();
+	}
+	print_data(client);
+	cout << "How much do you wish to withdraw?\n-> ";
+	cin >> withdraw;
+	for (s_data &data : v_data)
+	{
+		if (data.acount_number == account_number)
+		{
+			while (data.account_balance < withdraw)
+			{
+				cout << "You can withdraw up to " << data.account_balance << "$\n";
+				cout << "How much do you wish to withdraw?\n-> ";
+				cin >> withdraw;
+			}
+			cout << "Do you wish to perform this transaction? (Y/N)\n-> ";
+			cin >> answer;
+			if (answer == 'Y' || answer == 'y')
+			{
+				data.account_balance -= withdraw;
+				cout << "Withdraw successed, balance now is "
+					<< data.account_balance << '$' << endl;
+				save_clients_to_file(FILE_NAME, v_data);
+				return (true);
+			}
+			return (false);
+		}
 	}
 	return (false);
 }
