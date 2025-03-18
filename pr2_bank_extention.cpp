@@ -579,6 +579,55 @@ void	show_withdraw_screen(void)
 	withdraw_from_client_account(account_number, v_data);
 }
 
+void	print_header_for_total_balances(short number_of_clients)
+{
+	cout << "\n\t\t***Clients balances list (" << number_of_clients << ")***\n";
+	for (int i = 0; i < 4; i++)
+	{
+		cout << "____________________";
+	}
+	cout << '\n';
+	cout << "| Acount number\t| Client name\t\t\t";
+	cout << "| Acount balance\n";
+	for (int i = 0; i < 4; i++)
+	{
+		cout << "____________________";
+	}
+	cout << endl;
+}
+
+void	line_printer_for_total_balances(s_data &data)
+{
+	cout << "| " << left << setw(14) << data.acount_number;
+	cout << "| " << left << setw(30) << data.name;
+	cout << "| " << left << setw(14) << to_string(data.account_balance) + "$";
+	cout << endl;
+}
+
+void	show_total_balances_screen(void)
+{
+	vector <s_data>	v_data;
+	double			total_balances = 0;
+
+	v_data = load_file_to_data_vector(FILE_NAME);
+	if (v_data.size() == 0)
+		cout << "No available clients in the system" << endl;
+	else
+	{
+		print_header_for_total_balances(v_data.size());
+		for (s_data &data : v_data)
+		{
+			line_printer_for_total_balances(data);
+			total_balances += data.account_balance;
+		}
+		for (int i = 0; i < 4; i++)
+		{
+			cout << "____________________";
+		}
+	}
+	cout << "\n\tTotal balances is: " << total_balances << endl;
+}
+
 void	perform_transactions_option(e_transactions_options option)
 {
 	switch (option)
@@ -593,11 +642,11 @@ void	perform_transactions_option(e_transactions_options option)
 			show_withdraw_screen();
 			back_to_transactions_menu();
 			break ;
-		// case e_transactions_options::e_total_balances:
-		// 	system ("clear");
-		// 	show_total_balances_screen();
-		// 	back_to_transactions_menu();
-		// 	break ;
+		case e_transactions_options::e_total_balances:
+			system ("clear");
+			show_total_balances_screen();
+			back_to_transactions_menu();
+			break ;
 		case e_transactions_options::e_main_menu:
 			system ("clear");
 			show_main_menu_screen();
